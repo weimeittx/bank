@@ -97,10 +97,19 @@ contract BigBank is Bank{
 
 contract Admin{
 
-    address  payable public bank;
+    address _owner;
+    constructor(){
+        _owner = msg.sender;
+    }
 
-    function withdraw(address add) external {
-        Bank( payable(add)).withdraw();
+
+    modifier onlyOwner(){
+        require(_owner == msg.sender, "not owner!");
+        _;
+    }
+
+    function withdraw(address add) external onlyOwner{
+        BigBank( payable(add)).withdraw();
     }
 
     receive() external payable {
