@@ -12,7 +12,7 @@ contract Bank {
         admin = msg.sender;
     }
 
-    receive() external payable {
+    receive() external payable  effectiveBalance{
         // 更新余额
         if (balances[msg.sender] == 0) {
             depositors.push(msg.sender);
@@ -20,6 +20,12 @@ contract Bank {
         balances[msg.sender] += msg.value;
         // 更新 top3
         _updateTop3(msg.sender);
+    }
+
+
+    modifier effectiveBalance(){
+        require(msg.value > 0.001 ether);
+        _;
     }
 
     function withdraw() external {
@@ -65,4 +71,9 @@ contract Bank {
     function getTop3() external view returns (address[3] memory) {
         return top3;
     }
+}
+
+
+contract Admin{
+    
 }
